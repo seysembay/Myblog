@@ -1,8 +1,8 @@
 __all__ = (
     "db",
     "User",
-    "Posts",
+    "Post",
 )
 
 from .database import db
-from .users import User, Posts
+from .users import User, Post

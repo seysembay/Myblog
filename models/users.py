@@ -1,29 +1,24 @@
-from datetime import datetime
-from typing import Optional
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
-from typing_extensions import List
+from flask_login import UserMixin
 
-from database import db
-from sqlalchemy import Integer, func, ForeignKey
+from .database import db
 
 
-class Base(DeclarativeBase):
-    pass
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    posts = db.relationship('Post', backref='author', lazy=True)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 
-class User(Base):
-    __tablename__ = "user"
-    id = mapped_column(Integer, primary_key=True)
-    username: Mapped[str]
-    email: Mapped[str]
-    password: Mapped[str]
-    created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
-    posts: Mapped[List["Posts"]] = relationship(back_populates="user")
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-
-class Posts(Base):
-    __tablename__ = "posts"
-    id = mapped_column(Integer, primary_key=True)
-    user_id = mapped_column(ForeignKey("user.id"))
-    email_address: Mapped[str]
-    user: Mapped["User"] = relationship(back_populates="posts")
+    def __repr__(self):
+        return '<Post %r>' % self.title

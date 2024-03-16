@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание поста</title>
+</head>
+<body>
+<h1>Создать пост</h1>
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+<form method="post">
+    <div>
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+        <label for="content">Содержание:</label>
+        <textarea id="content" name="content" required></textarea>
+    </div>
+    <div>
+        <button type="submit">Создать пост</button>
+    </div>
+</form>
+</body>
+</html>
